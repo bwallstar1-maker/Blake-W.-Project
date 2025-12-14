@@ -2,9 +2,9 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 
-# -----------------------------
+
 # Questions Data
-# -----------------------------
+
 questions_data = [
     ["What NBA team has the most championships?","Boston Celtics","Los Angeles Lakers","Chicago Bulls","San Antonio Spurs","A"],
     ["Which country won the FIFA World Cup in 2018?","France","Croatia","Brazil","Germany","A"],
@@ -23,9 +23,9 @@ questions_data = [
     ["What is the name of the deepest known point in the Earth's oceans?","Challenger Deep","Mariana Trench","Tonga Trench","Puerto Rico Trench","A"]
 ]
 
-# -----------------------------
+
 # Classes
-# -----------------------------
+
 class Question:
     def __init__(self, text, choices, correct_letter):
         self.text = text
@@ -43,9 +43,9 @@ class Player:
         self.score = 0
         self.lifelines_used = {"50/50": False, "Phone": False, "Audience": False}
 
-# -----------------------------
+
 # Game Logic
-# -----------------------------
+
 class Game:
     def __init__(self, root, questions):
         self.root = root
@@ -63,9 +63,9 @@ class Game:
         self.btn_audience = None
         self.create_intro()
 
-    # -----------------------------
+
     # GUI: Intro Screen
-    # -----------------------------
+
     def create_intro(self):
         self.clear_window()
         tk.Label(self.root, text="Who Wants to Be a Millionaire", font=("Arial", 20)).pack(pady=20)
@@ -82,9 +82,9 @@ class Game:
         self.player = Player(name)
         self.show_question()
 
-    # -----------------------------
+    
     # GUI: Question Screen
-    # -----------------------------
+
     def show_question(self):
         self.clear_window()
         if self.current_index >= len(self.questions):
@@ -102,16 +102,15 @@ class Game:
         question_frame = tk.Frame(main_frame)
         question_frame.pack(side=tk.LEFT, padx=10)
 
-        # -----------------------------
         # Money Ladder
-        # -----------------------------
+     
         self.ladder_labels.clear()
         for i in range(len(self.prizes)-1, -1, -1):
             color = "white"
             if i == self.current_index:
-                color = "yellow"  # Current question
+                color = "yellow"  
             elif i < self.current_index:
-                color = "green"  # Earned money
+                color = "green"  
             if (i+1) in self.guaranteed:
                 if color == "white":
                     color = "blue"
@@ -155,9 +154,8 @@ class Game:
 
         tk.Button(question_frame, text="Take Money and Quit", command=self.take_money_prompt).pack(pady=10)
 
-    # -----------------------------
     # Lifelines
-    # -----------------------------
+  
     def lifeline_5050(self):
         if self.player.lifelines_used["50/50"]:
             messagebox.showinfo("50/50", "You have already used this lifeline.")
@@ -199,9 +197,9 @@ class Game:
         result = "\n".join([f"{l}: {votes[i]}%" for i,l in enumerate(["A","B","C","D"])])
         messagebox.showinfo("Ask the Audience", f"Audience Poll:\n{result}")
 
-    # -----------------------------
+
     # Answer Handling (Simplified)
-    # -----------------------------
+    
     def answer_question(self, choice):
         if self.current_question.check_answer(choice):
             self.player.score = self.prizes[self.current_index]
@@ -213,9 +211,9 @@ class Game:
                     guaranteed_prize = self.guaranteed[q_index]
             self.end_game(win=False)
 
-    # -----------------------------
+
     # Next Question Helper
-    # -----------------------------
+    
     def next_question(self):
         self.current_index += 1
         if self.current_index in self.guaranteed:
@@ -223,9 +221,9 @@ class Game:
         else:
             self.show_question()
 
-    # -----------------------------
-    # Quit / Take Money
-    # -----------------------------
+    
+    #Quit / Take Money
+    
     def take_money_prompt(self):
         prize = self.prizes[self.current_index-1] if self.current_index > 0 else 0
         if self.current_index in self.guaranteed:
@@ -245,9 +243,9 @@ class Game:
         else:
             self.show_question()
 
-    # -----------------------------
+    
     # End Game
-    # -----------------------------
+    
     def end_game(self, win=False):
         self.clear_window()
         if win:
@@ -266,9 +264,9 @@ class Game:
         tk.Button(button_frame, text="Play Again", width=15, command=self.play_again).pack(side=tk.LEFT, padx=10)
         tk.Button(button_frame, text="Exit", width=15, command=self.root.destroy).pack(side=tk.RIGHT, padx=10)
 
-    # -----------------------------
+    
     # Play Again Logic
-    # -----------------------------
+    
     def play_again(self):
         self.current_index = 0
         self.player.score = 0
@@ -276,18 +274,18 @@ class Game:
         self.questions = [Question(q[0],[q[1],q[2],q[3],q[4]],q[5]) for q in questions_data]
         self.show_question()
 
-    # -----------------------------
+    
     # Helper
-    # -----------------------------
+   
     def clear_window(self):
         for widget in self.root.winfo_children():
             widget.destroy()
 
-# -----------------------------
 # Initialize Game
-# -----------------------------
+
 if __name__ == "__main__":
     root = tk.Tk()
     question_objects = [Question(q[0],[q[1],q[2],q[3],q[4]],q[5]) for q in questions_data]
     game = Game(root, question_objects)
     root.mainloop()
+
